@@ -91,7 +91,6 @@ class Item(Base):
         secondary="item_compound_association_table",
         back_populates="items"
     )
-# todo создать M2M связь для item_compound
 
 
 class Compound(Base):
