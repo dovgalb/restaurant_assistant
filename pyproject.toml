@@ -10,6 +10,7 @@ packages = [{include = "restaurant_assistant"}]
 python = "^3.10"
 fastapi = "^0.95.2"
 SQLAlchemy = "^2.0.15"
+alembic = "^1.11.1"
 
 
 
