@@ -1,5 +1,4 @@
 from typing import List, Optional
-import enum
 from sqlalchemy import Table, Enum, Column, ForeignKey, String, Integer
 from sqlalchemy.orm import mapped_column, relationship, Mapped, DeclarativeBase
 
@@ -8,9 +7,9 @@ class Base(DeclarativeBase):
     pass
 
 
-class CategoryEnum(Enum):
-    BAR = "Bar"
-    KITCHEN = "Kitchen"
+# class CategoryEnum(Enum):
+#     BAR = "Bar"
+#     KITCHEN = "Kitchen"
 
 
 class User(Base):
@@ -35,7 +34,7 @@ class Restaurant(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
-    user_id: [Mapped[User]] = mapped_column(ForeignKey("user.id"))
+    user_id: Mapped[User] = mapped_column(ForeignKey("user.id"))
 
     user: Mapped["User"] = relationship(back_populates="restaurants")
     menus: Mapped[List["Menu"]] = relationship(
@@ -68,7 +67,7 @@ class Category(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String, unique=True)
-    section = mapped_column(Enum(CategoryEnum))
+    section = mapped_column(Enum("Bar", "Kitchen"), nullable=False)
     menu_id: Mapped[int] = ForeignKey("menu.id")
 # todo продумать связь для блюда и категории чтобы одно блюда можно было использовать в другом меню
 
@@ -104,7 +103,7 @@ class Compound(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), unique=True)
-    items = relationship(
+    items: Mapped[List["Item"]] = relationship(
         secondary="item_compound_associations",
         back_populates="compound"
     )

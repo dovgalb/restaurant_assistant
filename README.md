@@ -15,3 +15,13 @@
 4. Если надо добавить зависимостей 
 
 ```poetry add "library_name"```
+
+
+Команды для alembic
+1. Создание миграций
+
+```alembic revision --autogenerate -m 'commit-text'```
+
+2. Применение миграций
+
+```alembic upgrade head```
