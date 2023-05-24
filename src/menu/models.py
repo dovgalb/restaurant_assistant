@@ -74,6 +74,7 @@ class Category(Base):
 
 
 class ItemCompoundAssociations(Base):
+    """Ассоциативный класс для связи таблиц item_table и compound_table"""
     __tablename__ = "item_compound_associations"
 
     item_id: Mapped[int] = mapped_column(ForeignKey("item_table.id"), primary_key=True)
