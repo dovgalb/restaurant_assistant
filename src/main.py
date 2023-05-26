@@ -1,8 +1,12 @@
+from fastapi import FastAPI
+from sqlalchemy.orm import Session
 
-def print_hi(name):
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+
+app = FastAPI(
+    title="Restaurant Assistant"
+)
 
 
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
+@app.get('/{user_id}')
+def get_user_id(user_id: int):
+    return user_id

@@ -25,3 +25,9 @@
 2. Применение миграций
 
 ```alembic upgrade head```
+
+
+Запуск сервера uvicorn
+1. Нужно быть в папке src
+
+```uvicorn main:app --reload```

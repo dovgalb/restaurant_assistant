@@ -8,10 +8,12 @@ packages = [{include = "restaurant_assistant"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-fastapi = "^0.95.2"
+fastapi = {extras = ["all"], version = "^0.95.2"}
 SQLAlchemy = "^2.0.15"
 alembic = "^1.11.1"
 python-dotenv = "^1.0.0"
+uvicorn = "^0.22.0"
+aiosqlite = "^0.19.0"
 
 
 
