@@ -1,6 +1,6 @@
 Команды для инициализации poetry
 
-1. Установка poetry. Запускать на окружении системы(не виртуальное)
+1. Установка poetry. Запускать на окружении системы(не виртуальное.)
 
 ```pip install poetry```
 
@@ -15,3 +15,19 @@
 4. Если надо добавить зависимостей 
 
 ```poetry add "library_name"```
+
+
+Команды для alembic
+1. Создание миграций
+
+```alembic revision --autogenerate -m 'commit-text'```
+
+2. Применение миграций
+
+```alembic upgrade head```
+
+
+Запуск сервера uvicorn
+1. Нужно быть в папке src
+
+```uvicorn main:app --reload```
