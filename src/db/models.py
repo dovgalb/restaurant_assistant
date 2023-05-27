@@ -1,5 +1,6 @@
-from typing import List
-from sqlalchemy import Enum, ForeignKey, String, Integer
+from datetime import datetime
+from typing import List, Optional
+from sqlalchemy import Enum, ForeignKey, String, Integer, Boolean, TIMESTAMP
 from sqlalchemy.orm import mapped_column, relationship, Mapped
 
 from src.db.base import Base
@@ -32,6 +33,10 @@ class Restaurants(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    description: Mapped[str] = mapped_column(String(350), nullable=True)
+    created_at = mapped_column(TIMESTAMP, default=datetime.utcnow)
+    updated_at = mapped_column(TIMESTAMP, onupdate=datetime.utcnow)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     user_id: Mapped[Users] = mapped_column(ForeignKey("users.id"))
 
     user: Mapped["Users"] = relationship(back_populates="restaurants")
@@ -42,9 +47,6 @@ class Restaurants(Base):
                                                                                  viewonly=True)
 
 
-# todo Изменить схему на M2M
-# todo Добавить поле bool поле is_active
-# todo Подумать, нужно ли добавить адрес ресторана
 # todo добавить __repr__ методы для классов
 
 
@@ -54,6 +56,10 @@ class Menus(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    description: Mapped[str] = mapped_column(String(350))
+    created_at = mapped_column(TIMESTAMP, default=datetime.utcnow)
+    updated_at = mapped_column(TIMESTAMP, onupdate=datetime.utcnow)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     categories: Mapped[List["Categories"]] = relationship(back_populates="menu")
     restaurants: Mapped[List["Restaurants"]] = relationship(
@@ -107,6 +113,8 @@ class Items(Base):
     name: Mapped[str] = mapped_column(String, unique=True)
     weight: Mapped[int] = mapped_column(Integer)
     description: Mapped[str] = mapped_column(String)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
     compounds: Mapped[List["Compounds"]] = relationship(
         secondary="item_compound_associations",
         back_populates="items"
@@ -121,6 +129,8 @@ class Compounds(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), unique=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
     items: Mapped[List["Items"]] = relationship(
         secondary="item_compound_associations",
         back_populates="compounds"
