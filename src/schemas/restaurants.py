@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class RestaurantsList(BaseModel):
+class RestaurantsInfo(BaseModel):
     """Базовая схема модели Рестораны"""
 
     id: int
