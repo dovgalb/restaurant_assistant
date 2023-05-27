@@ -40,6 +40,8 @@ class Restaurants(Base):
     )
     menu_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="restaurant",
                                                                                  viewonly=True)
+
+
 # todo Изменить схему на M2M
 # todo Добавить поле bool поле is_active
 # todo Подумать, нужно ли добавить адрес ресторана
@@ -70,6 +72,9 @@ class Categories(Base):
     section = mapped_column(Enum("Bar", "Kitchen", name="section_enum"), nullable=False)
     menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id"))
     menu: Mapped["Menus"] = relationship(back_populates="categories")
+    category_associations: Mapped[List["ItemCategoryAssociations"]] = relationship(back_populates="category")
+
+
 # todo продумать связь для блюда и категории чтобы одно блюда можно было использовать в другом меню
 
 
@@ -79,8 +84,19 @@ class ItemCompoundAssociations(Base):
 
     item_id: Mapped[int] = mapped_column(ForeignKey("items.id"), primary_key=True)
     compound_id: Mapped[int] = mapped_column(ForeignKey("compounds.id"), primary_key=True)
+    amount: Mapped[int] = mapped_column(Integer, comment="Кол-во грамм продукта")
     item: Mapped["Items"] = relationship(back_populates="compound_associations")
     compound: Mapped["Compounds"] = relationship(back_populates="item_associations")
+
+
+class ItemCategoryAssociations(Base):
+    """Ассоциативный класс для связи таблиц item_table и category_table"""
+    __tablename__ = "item_category_associations"
+
+    item_id: Mapped[int] = mapped_column(ForeignKey("items.id"), primary_key=True)
+    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), primary_key=True)
+    item: Mapped["Items"] = relationship(back_populates="category_associations")
+    category: Mapped["Categories"] = relationship(back_populates="category_associations")
 
 
 class Items(Base):
@@ -96,6 +112,7 @@ class Items(Base):
         back_populates="items"
     )
     compound_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="item")
+    category_associations: Mapped[List["ItemCategoryAssociations"]] = relationship(back_populates="item")
 
 
 class Compounds(Base):
@@ -109,4 +126,3 @@ class Compounds(Base):
         back_populates="compounds"
     )
     item_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="compound")
-    # todo узнать почему на схеме в связующей таблице указан column amount
