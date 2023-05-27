@@ -1,17 +1,19 @@
-from src.repository.restaurants import restaurant_repository
+from src.repository.crud.restaurants import restaurant_repository
+from src.repository.unit_of_work.base import SqlAlchemyUnitOfWork
+from src.schemas.restaurants import RestaurantsList
+from src.services.base import CrudService
 
 
-class RestaurantService:
+class RestaurantService(CrudService):
     """Сервис описания операций над медиакартами субъектов РФ"""
-
-    async def list(self) -> list[dict]:
-        """Получаем список сущностей по переданным фильтрам"""
-        # TODO здесь будет вызов репозитория
-        repository = restaurant_repository()
-
-        return repository.list()
 
 
 def restaurant_service() -> RestaurantService:
-    # TODO реализовать
-    return RestaurantService()
+    unit_of_work = SqlAlchemyUnitOfWork(
+        repository=restaurant_repository,
+    )
+
+    return RestaurantService(
+        unit_of_work=unit_of_work,
+        read_schema=RestaurantsList,
+    )

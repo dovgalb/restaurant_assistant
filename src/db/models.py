@@ -1,10 +1,8 @@
-from typing import List, Optional
-from sqlalchemy import Table, Enum, Column, ForeignKey, String, Integer
-from sqlalchemy.orm import mapped_column, relationship, Mapped, DeclarativeBase
+from typing import List
+from sqlalchemy import Enum, ForeignKey, String, Integer
+from sqlalchemy.orm import mapped_column, relationship, Mapped
 
-
-class Base(DeclarativeBase):
-    pass
+from src.db.base import Base
 
 
 # class CategoryEnum(Enum):
@@ -16,7 +14,7 @@ class Users(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    restaurants: Mapped[List["Restaurant"]] = relationship(back_populates="user")
+    restaurants: Mapped[List["Restaurants"]] = relationship(back_populates="user")
 
 
 class RestaurantMenuAssociations(Base):
@@ -24,8 +22,8 @@ class RestaurantMenuAssociations(Base):
 
     restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"), primary_key=True)
     menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id"), primary_key=True)
-    restaurant: Mapped["Restaurant"] = relationship(back_populates="menu_associations")
-    menu: Mapped["Menu"] = relationship(back_populates="restaurant_associations")
+    restaurant: Mapped["Restaurants"] = relationship(back_populates="menu_associations")
+    menu: Mapped["Menus"] = relationship(back_populates="restaurant_associations")
 
 
 class Restaurants(Base):
@@ -38,7 +36,7 @@ class Restaurants(Base):
 
     user: Mapped["Users"] = relationship(back_populates="restaurants")
     menus: Mapped[List["Menus"]] = relationship(
-        secondary="restaurant_menu_association", back_populates='restaurants'
+        secondary="restaurant_menu_associations", back_populates='restaurants'
     )
     menu_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="restaurant")
 # todo Изменить схему на M2M
@@ -54,11 +52,11 @@ class Menus(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
 
-    categories: Mapped[List["Categories"]] = relationship(back_populates="db")
+    categories: Mapped[List["Categories"]] = relationship(back_populates="menu")
     restaurants: Mapped[List["Restaurants"]] = relationship(
-        secondary="restaurant_menu_association", back_populates='menus'
+        secondary="restaurant_menu_associations", back_populates='menus'
     )
-    restaurant_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="db")
+    restaurant_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="menu")
 
 
 class Categories(Base):
@@ -67,8 +65,9 @@ class Categories(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String, unique=True)
-    section = mapped_column(Enum("Bar", "Kitchen"), nullable=False)
-    menu_id: Mapped[int] = ForeignKey("db.id")
+    section = mapped_column(Enum("Bar", "Kitchen", name="section_enum"), nullable=False)
+    menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id"))
+    menu: Mapped["Menus"] = relationship(back_populates="categories")
 # todo продумать связь для блюда и категории чтобы одно блюда можно было использовать в другом меню
 
 
@@ -92,7 +91,7 @@ class Items(Base):
     description: Mapped[str] = mapped_column(String)
     compounds: Mapped[List["Compounds"]] = relationship(
         secondary="item_compound_associations",
-        back_populates="item"
+        back_populates="items"
     )
     compound_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="item")
 
@@ -105,7 +104,7 @@ class Compounds(Base):
     name: Mapped[str] = mapped_column(String(100), unique=True)
     items: Mapped[List["Items"]] = relationship(
         secondary="item_compound_associations",
-        back_populates="compound"
+        back_populates="compounds"
     )
     item_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="compound")
     # todo узнать почему на схеме в связующей таблице указан column amount

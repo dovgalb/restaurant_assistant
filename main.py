@@ -7,7 +7,7 @@ app = FastAPI(
     title="Restaurant Assistant"
 )
 
-app.include_router(restaurant_router, prefix="/restaurants")
+app.include_router(restaurant_router, prefix="/restaurants",  tags=["Restaurants"],)
 
 
 @app.get('/{user_id}')

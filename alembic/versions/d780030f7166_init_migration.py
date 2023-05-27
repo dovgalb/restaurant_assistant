@@ -1,8 +1,8 @@
 """init_migration
 
-Revision ID: 2c48f6f50777
+Revision ID: d780030f7166
 Revises: 
-Create Date: 2023-05-26 17:40:34.057588
+Create Date: 2023-05-27 11:02:34.319613
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2c48f6f50777'
+revision = 'd780030f7166'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,55 +21,55 @@ def upgrade() -> None:
     op.create_table('categories',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
-    sa.Column('section', sa.Enum('Bar', 'Kitchen'), nullable=False),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
+    sa.Column('section', sa.Enum('Bar', 'Kitchen', name='section_enum'), nullable=False),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_categories')),
+    sa.UniqueConstraint('name', name=op.f('uq_categories_name'))
     )
     op.create_table('compounds',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_compounds')),
+    sa.UniqueConstraint('name', name=op.f('uq_compounds_name'))
     )
     op.create_table('items',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('weight', sa.Integer(), nullable=False),
     sa.Column('description', sa.String(), nullable=False),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_items')),
+    sa.UniqueConstraint('name', name=op.f('uq_items_name'))
     )
     op.create_table('menus',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=False),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_menus')),
+    sa.UniqueConstraint('name', name=op.f('uq_menus_name'))
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_users'))
     )
     op.create_table('item_compound_associations',
     sa.Column('item_id', sa.Integer(), nullable=False),
     sa.Column('compound_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['compound_id'], ['compounds.id'], ),
-    sa.ForeignKeyConstraint(['item_id'], ['items.id'], ),
-    sa.PrimaryKeyConstraint('item_id', 'compound_id')
+    sa.ForeignKeyConstraint(['compound_id'], ['compounds.id'], name=op.f('fk_item_compound_associations_compound_id_compounds')),
+    sa.ForeignKeyConstraint(['item_id'], ['items.id'], name=op.f('fk_item_compound_associations_item_id_items')),
+    sa.PrimaryKeyConstraint('item_id', 'compound_id', name=op.f('pk_item_compound_associations'))
     )
     op.create_table('restaurants',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('name')
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], name=op.f('fk_restaurants_user_id_users')),
+    sa.PrimaryKeyConstraint('id', name=op.f('pk_restaurants')),
+    sa.UniqueConstraint('name', name=op.f('uq_restaurants_name'))
     )
     op.create_table('restaurant_menu_associations',
     sa.Column('restaurant_id', sa.Integer(), nullable=False),
     sa.Column('menu_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['menu_id'], ['menus.id'], ),
-    sa.ForeignKeyConstraint(['restaurant_id'], ['restaurants.id'], ),
-    sa.PrimaryKeyConstraint('restaurant_id', 'menu_id')
+    sa.ForeignKeyConstraint(['menu_id'], ['menus.id'], name=op.f('fk_restaurant_menu_associations_menu_id_menus')),
+    sa.ForeignKeyConstraint(['restaurant_id'], ['restaurants.id'], name=op.f('fk_restaurant_menu_associations_restaurant_id_restaurants')),
+    sa.PrimaryKeyConstraint('restaurant_id', 'menu_id', name=op.f('pk_restaurant_menu_associations'))
     )
     # ### end Alembic commands ###
 

@@ -5,7 +5,30 @@ class RestaurantsList(BaseModel):
     """Базовая схема модели Рестораны"""
 
     id: int
-    #TODO сделать
+
+    # TODO сделать
+
+    class Config:
+        orm_mode = True
+
+
+class CreateRestaurantsSchema(BaseModel):
+    """Базовая схема модели Рестораны"""
+
+    id: int
+
+    # TODO сделать
+
+    class Config:
+        orm_mode = True
+
+
+class UpdateRestaurantsSchema(BaseModel):
+    """Базовая схема модели Рестораны"""
+
+    id: int
+
+    # TODO сделать
 
     class Config:
         orm_mode = True
