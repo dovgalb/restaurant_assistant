@@ -5,6 +5,7 @@ class RestaurantsList(BaseModel):
     """Базовая схема модели Рестораны"""
 
     id: int
+    name: str
 
     # TODO сделать
 
