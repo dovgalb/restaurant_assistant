@@ -15,7 +15,8 @@ class RestaurantsList(BaseModel):
 class CreateRestaurantsSchema(BaseModel):
     """Базовая схема модели Рестораны"""
 
-    id: int
+    name: str
+    user_id: int
 
     # TODO сделать
 
