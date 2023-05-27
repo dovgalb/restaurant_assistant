@@ -38,7 +38,8 @@ class Restaurants(Base):
     menus: Mapped[List["Menus"]] = relationship(
         secondary="restaurant_menu_associations", back_populates='restaurants'
     )
-    menu_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="restaurant")
+    menu_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="restaurant",
+                                                                                 viewonly=True)
 # todo Изменить схему на M2M
 # todo Добавить поле bool поле is_active
 # todo Подумать, нужно ли добавить адрес ресторана
@@ -56,7 +57,8 @@ class Menus(Base):
     restaurants: Mapped[List["Restaurants"]] = relationship(
         secondary="restaurant_menu_associations", back_populates='menus'
     )
-    restaurant_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="menu")
+    restaurant_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="menu",
+                                                                                       viewonly=True)
 
 
 class Categories(Base):
