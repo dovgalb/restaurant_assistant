@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import List, Optional
-from sqlalchemy import Enum, ForeignKey, String, Integer, Boolean, TIMESTAMP
+from sqlalchemy import Enum, ForeignKey, String, Integer, Boolean, TIMESTAMP, DateTime
 from sqlalchemy.orm import mapped_column, relationship, Mapped
+from sqlalchemy.sql import func
+
 
 from src.db.base import Base
 
@@ -34,8 +36,8 @@ class Restaurants(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(String(350), nullable=True)
-    created_at = mapped_column(TIMESTAMP, default=datetime.utcnow)
-    updated_at = mapped_column(TIMESTAMP, onupdate=datetime.utcnow)
+    created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at = mapped_column(DateTime(timezone=True), onupdate=func.now())
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     user_id: Mapped[Users] = mapped_column(ForeignKey("users.id"))
 
@@ -57,8 +59,8 @@ class Menus(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
     description: Mapped[str] = mapped_column(String(350))
-    created_at = mapped_column(TIMESTAMP, default=datetime.utcnow)
-    updated_at = mapped_column(TIMESTAMP, onupdate=datetime.utcnow)
+    created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at = mapped_column(DateTime(timezone=True), onupdate=func.now())
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 
     categories: Mapped[List["Categories"]] = relationship(back_populates="menu")
