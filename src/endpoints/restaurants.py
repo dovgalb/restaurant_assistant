@@ -43,5 +43,5 @@ async def delete_restaurant(
         data: DeleteRestaurantSchema,
         service=Depends(restaurant_service)
 ):
-    """Удаляет ресторан"""
+    """Удаление ресторана по id"""
     return await service._delete(entity_id=data.id)
