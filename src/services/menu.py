@@ -1,8 +1,8 @@
 """Модуль для бизнес-логики"""
-from repository.crud.menu import menu_repository
-from repository.unit_of_work.base import SqlAlchemyUnitOfWork
-from schemas.menu import MenuInfo
-from services.base import CrudService
+from src.repository.crud.menu import menu_repository
+from src.repository.unit_of_work.base import SqlAlchemyUnitOfWork
+from src.schemas.menu import MenuInfo
+from src.services.base import CrudService
 
 
 class MenuService(CrudService):

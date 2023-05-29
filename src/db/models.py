@@ -1,3 +1,4 @@
+import enum
 from datetime import datetime
 from typing import List, Optional
 from sqlalchemy import Enum, ForeignKey, String, Integer, Boolean, TIMESTAMP, DateTime
@@ -39,11 +40,11 @@ class Restaurants(Base):
     created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at = mapped_column(DateTime(timezone=True), onupdate=func.now())
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    user_id: Mapped[Users] = mapped_column(ForeignKey("users.id"))
 
+    user_id: Mapped[Users] = mapped_column(ForeignKey("users.id"))
     user: Mapped["Users"] = relationship(back_populates="restaurants")
     menus: Mapped[List["Menus"]] = relationship(
-        secondary="restaurant_menu_associations", back_populates='restaurants'
+        secondary="restaurant_menu_associations", back_populates='restaurants', overlaps="restaurants"
     )
     menu_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="restaurant",
                                                                                  viewonly=True)
@@ -65,10 +66,15 @@ class Menus(Base):
 
     categories: Mapped[List["Categories"]] = relationship(back_populates="menu")
     restaurants: Mapped[List["Restaurants"]] = relationship(
-        secondary="restaurant_menu_associations", back_populates='menus'
+        secondary="restaurant_menu_associations", back_populates='menus', overlaps="menus"
     )
     restaurant_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="menu",
                                                                                        viewonly=True)
+
+
+class SectionEnum(enum.Enum):
+    BAR = "Bar"
+    KITCHEN = "Kitchen"
 
 
 class Categories(Base):
@@ -77,7 +83,8 @@ class Categories(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String, unique=True)
-    section = mapped_column(Enum("Bar", "Kitchen", name="section_enum"), nullable=False)
+    # section = mapped_column(Enum("Bar", "Kitchen", name="section_enum", create_type=False), nullable=False)
+    section = mapped_column(Enum(SectionEnum), nullable=False)
     menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id"))
     menu: Mapped["Menus"] = relationship(back_populates="categories")
     category_associations: Mapped[List["ItemCategoryAssociations"]] = relationship(back_populates="category")
@@ -119,7 +126,8 @@ class Items(Base):
 
     compounds: Mapped[List["Compounds"]] = relationship(
         secondary="item_compound_associations",
-        back_populates="items"
+        back_populates="items",
+        overlaps="items"
     )
     compound_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="item")
     category_associations: Mapped[List["ItemCategoryAssociations"]] = relationship(back_populates="item")
@@ -135,6 +143,7 @@ class Compounds(Base):
 
     items: Mapped[List["Items"]] = relationship(
         secondary="item_compound_associations",
-        back_populates="compounds"
+        back_populates="compounds",
+        overlaps="compounds"
     )
     item_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="compound")
