@@ -5,8 +5,8 @@ from enum import Enum
 
 
 class SectionEnum(str, Enum):
-    BAR = "Bar"
-    KITCHEN = "Kitchen"
+    BAR = "бар"
+    KITCHEN = "кухня"
 
 
 class CategoriesInfo(BaseModel):
@@ -15,6 +15,7 @@ class CategoriesInfo(BaseModel):
     id: int
     name: str
     section: SectionEnum
+    menu_id: int
 
     class Config:
         allow_population_by_field_name = True
@@ -28,6 +29,7 @@ class CreateCategorySchema(BaseModel):
 
     name: str
     section: SectionEnum
+    menu_id: int
 
     class Config:
         allow_population_by_field_name = True
@@ -42,6 +44,7 @@ class UpdateCategorySchema(BaseModel):
     id: int
     name: str
     section: SectionEnum
+    menu_id: int
 
     class Config:
         allow_population_by_field_name = True
@@ -56,4 +59,7 @@ class DeleteCategorySchema(BaseModel):
     id: int
 
     class Config:
+        allow_population_by_field_name = True
         orm_mode = True
+        use_enum_values = True
+        arbitrary_types_allowed = True

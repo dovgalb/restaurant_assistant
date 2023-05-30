@@ -1,17 +1,13 @@
 import enum
 from datetime import datetime
 from typing import List, Optional
-from sqlalchemy import Enum, ForeignKey, String, Integer, Boolean, TIMESTAMP, DateTime
+from sqlalchemy import ForeignKey, String, Integer, Boolean, TIMESTAMP, DateTime, Column
 from sqlalchemy.orm import mapped_column, relationship, Mapped
 from sqlalchemy.sql import func
+from sqlalchemy import Enum as SQLAlchemyEnum
 
 
 from src.db.base import Base
-
-
-# class CategoryEnum(Enum):
-#     BAR = "Bar"
-#     KITCHEN = "Kitchen"
 
 
 class Users(Base):
@@ -72,19 +68,14 @@ class Menus(Base):
                                                                                        viewonly=True)
 
 
-class SectionEnum(enum.Enum):
-    BAR = "Bar"
-    KITCHEN = "Kitchen"
-
-
 class Categories(Base):
     """Категории меню(Основные блюда, горячие закуски, первые блюда и т.д.)"""
     __tablename__ = "categories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String, unique=True)
-    # section = mapped_column(Enum("Bar", "Kitchen", name="section_enum", create_type=False), nullable=False)
-    section = mapped_column(Enum(SectionEnum), nullable=False)
+    # section = mapped_column(SQLAlchemyEnum(SectionEnum), nullable=False)
+    section = mapped_column(String(10), nullable=False)
     menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id"))
     menu: Mapped["Menus"] = relationship(back_populates="categories")
     category_associations: Mapped[List["ItemCategoryAssociations"]] = relationship(back_populates="category")
