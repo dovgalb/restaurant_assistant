@@ -114,6 +114,7 @@ class Items(Base):
     # price: Mapped[int] = mapped_column(Integer)
     description: Mapped[str] = mapped_column(String)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    price: Mapped[int] = mapped_column(Integer)
     # todo Добавить поле price в схему
 
     compounds: Mapped[List["Compounds"]] = relationship(

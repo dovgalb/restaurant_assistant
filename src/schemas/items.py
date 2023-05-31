@@ -2,10 +2,6 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 
-# class CompoundInfo(BaseModel):
-#     id: int
-
-
 class ItemsInfo(BaseModel):
     """Базовая схема для позиций в меню"""
 
@@ -14,6 +10,7 @@ class ItemsInfo(BaseModel):
     weight: int
     description: str
     is_active: bool
+    price: int
 
     class Config:
         orm_mode = True
@@ -26,6 +23,7 @@ class CreateItemsSchema(BaseModel):
     weight: int
     description: str
     is_active: bool = True
+    price: int
 
     class Config:
         orm_mode = True
@@ -38,6 +36,7 @@ class UpdateItemsSchema(BaseModel):
     weight: int
     description: str
     is_active: bool
+    price: int
 
     class Config:
         orm_mode = True
