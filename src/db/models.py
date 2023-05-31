@@ -74,7 +74,6 @@ class Categories(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String, unique=True)
-    # section = mapped_column(SQLAlchemyEnum(SectionEnum), nullable=False)
     section = mapped_column(String(10), nullable=False)
     menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id"))
     menu: Mapped["Menus"] = relationship(back_populates="categories")
@@ -112,8 +111,10 @@ class Items(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String, unique=True)
     weight: Mapped[int] = mapped_column(Integer)
+    # price: Mapped[int] = mapped_column(Integer)
     description: Mapped[str] = mapped_column(String)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # todo Добавить поле price в схему
 
     compounds: Mapped[List["Compounds"]] = relationship(
         secondary="item_compound_associations",
@@ -138,3 +139,7 @@ class Compounds(Base):
         overlaps="compounds"
     )
     item_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="compound")
+
+
+
+

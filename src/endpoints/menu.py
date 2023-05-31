@@ -5,7 +5,7 @@ from typing import List
 from fastapi import APIRouter, Depends
 
 from src.repository.filter.menu import menu_filter
-from src.schemas.menu import MenuInfo, CreateMenuSchema, UpdateMenuSchema, DeleteMenuSchema
+from src.schemas.menu import MenuInfo, CreateMenuSchema, UpdateMenuSchema
 from src.services.menu import menu_service
 
 menu_router = APIRouter()
@@ -26,19 +26,20 @@ async def create_menu(
     return await service._create(data)
 
 
-@menu_router.put('/', response_model=UpdateMenuSchema)
+@menu_router.put('/{menu_id}', response_model=UpdateMenuSchema)
 async def update_menu(
+        menu_id: int,
         data: UpdateMenuSchema,
         service=Depends(menu_service)
 ):
     """Обновление экземпляра меню"""
-    return await service._update(data=data, entity_id=data.id)
+    return await service._update(data=data, entity_id=menu_id)
 
 
-@menu_router.delete('/')
+@menu_router.delete('/{menu_id}')
 async def delete_menu(
-        data: DeleteMenuSchema,
+        menu_id: int,
         service=Depends(menu_service)
 ):
     """Удаляет меню"""
-    return await service._delete(entity_id=data.id)
+    return await service._delete(entity_id=menu_id)

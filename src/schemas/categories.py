@@ -41,7 +41,6 @@ class CreateCategorySchema(BaseModel):
 class UpdateCategorySchema(BaseModel):
     """Схема обновления Категории"""
 
-    id: int
     name: str
     section: SectionEnum
     menu_id: int
@@ -53,13 +52,13 @@ class UpdateCategorySchema(BaseModel):
         arbitrary_types_allowed = True
 
 
-class DeleteCategorySchema(BaseModel):
-    """Схема для удаления Категории"""
-
-    id: int
-
-    class Config:
-        allow_population_by_field_name = True
-        orm_mode = True
-        use_enum_values = True
-        arbitrary_types_allowed = True
+# class DeleteCategorySchema(BaseModel):
+#     """Схема для удаления Категории"""
+#
+#     pass
+#
+#     class Config:
+#         allow_population_by_field_name = True
+#         orm_mode = True
+#         use_enum_values = True
+#         arbitrary_types_allowed = True

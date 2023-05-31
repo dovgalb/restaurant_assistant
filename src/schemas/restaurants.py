@@ -38,7 +38,7 @@ class CreateRestaurantsSchema(BaseModel):
 
 class UpdateRestaurantsSchema(BaseModel):
     """Cхема для обновления модели Рестораны"""
-    id: int
+
     name: str
     description: Optional[str]
     updated_at: datetime
@@ -51,8 +51,8 @@ class UpdateRestaurantsSchema(BaseModel):
         orm_mode = True
 
 
-class DeleteRestaurantSchema(BaseModel):
-    id: int
-
-    class Config:
-        orm_mode = True
+# class DeleteRestaurantSchema(BaseModel):
+#     pass
+#
+#     class Config:
+#         orm_mode = True

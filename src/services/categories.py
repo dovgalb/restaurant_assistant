@@ -10,7 +10,7 @@ class CategoriesService(CrudService):
 
 def category_service() -> CategoriesService:
     unit_of_work = SqlAlchemyUnitOfWork(
-        repository=category_repository ,
+        repository=category_repository,
     )
 
     return CategoriesService(

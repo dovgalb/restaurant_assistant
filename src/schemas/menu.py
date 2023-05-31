@@ -37,7 +37,6 @@ class CreateMenuSchema(BaseModel):
 class UpdateMenuSchema(BaseModel):
     """Базовая схема модели Меню"""
 
-    id: int
     name: str
     description: str
     updated_at: datetime
@@ -49,10 +48,9 @@ class UpdateMenuSchema(BaseModel):
         orm_mode = True
 
 
-class DeleteMenuSchema(BaseModel):
-    """Схема удаления меню"""
-
-    id: int
-
-    class Config:
-        orm_mode = True
+# class DeleteMenuSchema(BaseModel):
+#     """Схема удаления меню"""
+#     pass
+#
+#     class Config:
+#         orm_mode = True

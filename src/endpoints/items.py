@@ -4,7 +4,7 @@
 from typing import List
 from fastapi import APIRouter, Depends
 
-from src.schemas.items import ItemsInfo, CreateItemsSchema
+from src.schemas.items import ItemsInfo, CreateItemsSchema, UpdateItemsSchema
 from src.services.items import items_service
 from src.repository.filter.items import items_filter
 
@@ -24,3 +24,22 @@ async def create_item(
 ):
     """Создает item"""
     return await service._create(data)
+
+
+@item_router.put('/{item_id}/', response_model=UpdateItemsSchema)
+async def update_item(
+        item_id: int,
+        data: CreateItemsSchema,
+        service=Depends(items_service)
+):
+    """Обновление item"""
+    return await service._update(data=data, entity_id=item_id)
+
+
+@item_router.delete("/{item_id}")
+async def delete_item(
+        item_id: int,
+        service=Depends(items_service)
+):
+    """Удаление item"""
+    return await service._delete(entity_id=item_id)
