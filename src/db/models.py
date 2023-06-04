@@ -2,7 +2,7 @@ import enum
 from datetime import datetime
 from typing import List, Optional
 from sqlalchemy import ForeignKey, String, Integer, Boolean, TIMESTAMP, DateTime, Column, LargeBinary, UniqueConstraint
-from sqlalchemy.orm import mapped_column, relationship, Mapped
+from sqlalchemy.orm import mapped_column, relationship, Mapped, backref
 from sqlalchemy.sql import func
 from sqlalchemy import Enum as SQLAlchemyEnum
 
@@ -220,6 +220,7 @@ class Dish(Base):
 
     subcategory_id = mapped_column(Integer, ForeignKey('subcategories.id'))
     subcategory = relationship("Subcategory", back_populates='dishes')
+    ingredients = relationship("Ingredient", secondary="DishIngredient.__table__")
 
     __table_args__ = (UniqueConstraint('id'),)
 
@@ -231,7 +232,7 @@ class Ingredient(Base):
     unit = mapped_column(String(3))
 
     parent_id = mapped_column(Integer, ForeignKey("ingredients.id"))
-    sub_ingredients = relationship("Ingredient", cascade="all, delete-orphan", backref=ForeignKey("ingredients.parent_id"))
+    sub_ingredients = relationship("Ingredient", cascade="all, delete-orphan", backref=backref("sub_ingredients", remote_side=[id]))
 
 
 class DishIngredient(Base):
@@ -240,7 +241,7 @@ class DishIngredient(Base):
     dish_id = mapped_column(Integer, ForeignKey("dishes.id"), primary_key=True)
     amount = mapped_column(Integer)
     ingredient = relationship("Ingredient")
-    dish = relationship("Dishes")
+    dish = relationship("Dish")
 
 
 
