@@ -7,6 +7,8 @@ from enum import Enum
 class SectionEnum(str, Enum):
     BAR = "бар"
     KITCHEN = "кухня"
+    SUSHIBAR = "суши-бар"
+
 
 
 class CategoriesInfo(BaseModel):

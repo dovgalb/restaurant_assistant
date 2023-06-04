@@ -10,7 +10,7 @@ class ItemsInfo(BaseModel):
     weight: int
     description: str
     is_active: bool
-    price: int
+    # price: int
 
     class Config:
         orm_mode = True
@@ -23,7 +23,7 @@ class CreateItemsSchema(BaseModel):
     weight: int
     description: str
     is_active: bool = True
-    price: int
+    # price: int
 
     class Config:
         orm_mode = True
@@ -36,7 +36,7 @@ class UpdateItemsSchema(BaseModel):
     weight: int
     description: str
     is_active: bool
-    price: int
+    # price: int
 
     class Config:
         orm_mode = True

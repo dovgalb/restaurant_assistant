@@ -17,3 +17,4 @@ def category_service() -> CategoriesService:
         unit_of_work=unit_of_work,
         read_schema=CategoriesInfo,
     )
+
