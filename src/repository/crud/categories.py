@@ -1,12 +1,12 @@
-from src.db.models import Categories
+from src.db.models import Category
 from src.repository.crud.base import SQLAlchemyCRUD
 from src.schemas.categories import CreateCategorySchema, UpdateCategorySchema
 
 
 class CategoryRepository(
-    SQLAlchemyCRUD[Categories, CreateCategorySchema, UpdateCategorySchema]
+    SQLAlchemyCRUD[Category, CreateCategorySchema, UpdateCategorySchema]
 ):
     pass
 
 
-category_repository = CategoryRepository(Categories)
+category_repository = CategoryRepository(Category)

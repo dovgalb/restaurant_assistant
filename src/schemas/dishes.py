@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 
 
-class ItemsInfo(BaseModel):
+class DishesInfo(BaseModel):
     """Базовая схема для позиций в меню"""
 
     id: int
@@ -16,7 +16,7 @@ class ItemsInfo(BaseModel):
         orm_mode = True
 
 
-class CreateItemsSchema(BaseModel):
+class CreateDishSchema(BaseModel):
     """Схема для создания item"""
 
     name: str
@@ -29,7 +29,7 @@ class CreateItemsSchema(BaseModel):
         orm_mode = True
 
 
-class UpdateItemsSchema(BaseModel):
+class UpdateDishSchema(BaseModel):
     """Схема для обновления item"""
 
     name: str
@@ -42,22 +42,6 @@ class UpdateItemsSchema(BaseModel):
         orm_mode = True
 
 
-# class DeleteItemSchema(BaseModel):
-#     """Схема для удаления item"""
-#     pass
-#
-#     class Config:
-#         orm_mode = True
-
-
-# class MyCompound(BaseModel):
-#     compound_id: int
-#     amount: int
-#
-#
-# class MyCustom(BaseModel):
-#     item_id: int
-#     compounds: List[MyCompound]
 
 
 

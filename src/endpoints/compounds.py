@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from typing import List
 
 from src.services.compounds import compounds_service
-from src.schemas.compounds import CompoundsInfo, CreateCompoundSchema, UpdateCompoundSchema
+from src.schemas.ingredients import CompoundsInfo, CreateCompoundSchema, UpdateCompoundSchema
 from src.repository.filter.compounds import compounds_filter
 
 compounds_router = APIRouter()

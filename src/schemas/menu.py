@@ -9,7 +9,7 @@ class MenuInfo(BaseModel):
 
     id: int
     name: str
-    description: str
+    description: Optional[str]
     created_at: datetime
     updated_at: datetime
     is_active: bool
@@ -47,10 +47,3 @@ class UpdateMenuSchema(BaseModel):
     class Config:
         orm_mode = True
 
-
-# class DeleteMenuSchema(BaseModel):
-#     """Схема удаления меню"""
-#     pass
-#
-#     class Config:
-#         orm_mode = True

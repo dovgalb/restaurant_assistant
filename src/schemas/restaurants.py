@@ -9,12 +9,11 @@ class RestaurantsInfo(BaseModel):
     id: int
     name: str
     description: Optional[str]
+    address: Optional[str]
     created_at: datetime
     updated_at: datetime
     is_active: bool = True
     user_id: int
-
-    # TODO сделать
 
     class Config:
         orm_mode = True
@@ -25,12 +24,11 @@ class CreateRestaurantsSchema(BaseModel):
 
     name: str
     description: Optional[str]
+    address: Optional[str]
     created_at: datetime
     updated_at: datetime
     is_active: bool
     user_id: int
-
-    # TODO сделать
 
     class Config:
         orm_mode = True
@@ -41,18 +39,11 @@ class UpdateRestaurantsSchema(BaseModel):
 
     name: str
     description: Optional[str]
+    address: Optional[str]
     updated_at: datetime
     is_active: bool
-    user_id: int
-
-    # TODO сделать
+    # user_id: int
 
     class Config:
         orm_mode = True
 
-
-# class DeleteRestaurantSchema(BaseModel):
-#     pass
-#
-#     class Config:
-#         orm_mode = True

@@ -1,7 +1,7 @@
 from src.services.base import CrudService
 from src.repository.unit_of_work.base import SqlAlchemyUnitOfWork
-from src.repository.crud.compounds import compounds_repository
-from src.schemas.compounds import CompoundsInfo
+from src.repository.crud.ingredient import compounds_repository
+from src.schemas.ingredients import CompoundsInfo
 
 
 class CompoundsService(CrudService):

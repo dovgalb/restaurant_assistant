@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class CompoundsInfo(BaseModel):
+class IngredientInfo(BaseModel):
     """Базовая схема для compounds(Лук, Огурцы, Помидор и т.д.)"""
 
     id: int
@@ -12,7 +12,7 @@ class CompoundsInfo(BaseModel):
         orm_mode = True
 
 
-class CreateCompoundSchema(BaseModel):
+class CreateIngredientSchema(BaseModel):
     """Схема для создания compounds"""
 
     name: str
@@ -22,7 +22,7 @@ class CreateCompoundSchema(BaseModel):
         orm_mode = True
 
 
-class UpdateCompoundSchema(BaseModel):
+class UpdateIngredientSchema(BaseModel):
     """Схема для обновления ингридиента"""
     name: str
     is_active: bool

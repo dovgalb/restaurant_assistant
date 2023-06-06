@@ -4,9 +4,9 @@
 from typing import List
 from fastapi import APIRouter, Depends
 
-from src.schemas.items import ItemsInfo, CreateItemsSchema, UpdateItemsSchema
-from src.services.items import items_service
-from src.repository.filter.items import items_filter
+from src.schemas.dishes import ItemsInfo, CreateItemsSchema, UpdateItemsSchema
+from src.services.dishes import items_service
+from src.repository.filter.dishes import items_filter
 
 item_router = APIRouter()
 
