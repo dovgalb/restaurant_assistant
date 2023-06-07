@@ -8,7 +8,7 @@ class DishesService(CrudService):
     pass
 
 
-def items_service() -> DishesService:
+def dishes_service() -> DishesService:
     unit_of_work = SqlAlchemyUnitOfWork(
         repository=dishes_repository
     )

@@ -4,42 +4,42 @@
 from typing import List
 from fastapi import APIRouter, Depends
 
-from src.schemas.dishes import ItemsInfo, CreateItemsSchema, UpdateItemsSchema
-from src.services.dishes import items_service
-from src.repository.filter.dishes import items_filter
+from src.schemas.dishes import DishesInfo, CreateDishSchema, UpdateDishSchema
+from src.services.dishes import dishes_service
+from src.repository.filter.dishes import dishes_filter
 
-item_router = APIRouter()
-
-
-@item_router.get('/', response_model=List[ItemsInfo])
-async def get_items(service=Depends(items_service)):
-    """Получение списка items"""
-    return await service._list(items_filter)
+dish_router = APIRouter()
 
 
-@item_router.post('/', response_model=CreateItemsSchema)
+@dish_router.get('/', response_model=List[DishesInfo])
+async def get_items(service=Depends(dishes_service)):
+    """Получение списка блюд"""
+    return await service._list(dishes_filter)
+
+
+@dish_router.post('/', response_model=CreateDishSchema)
 async def create_item(
-        data: CreateItemsSchema,
-        service=Depends(items_service)
+        data: CreateDishSchema,
+        service=Depends(dishes_service)
 ):
-    """Создает item"""
+    """Создает блюда"""
     return await service._create(data)
 
 
-@item_router.put('/{item_id}/', response_model=UpdateItemsSchema)
+@dish_router.put('/{dish_id}/', response_model=UpdateDishSchema)
 async def update_item(
-        item_id: int,
-        data: CreateItemsSchema,
-        service=Depends(items_service)
+        dish_id: int,
+        data: UpdateDishSchema,
+        service=Depends(dishes_service)
 ):
-    """Обновление item"""
-    return await service._update(data=data, entity_id=item_id)
+    """Обновление блюда"""
+    return await service._update(data=data, entity_id=dish_id)
 
 
-@item_router.delete("/{item_id}")
+@dish_router.delete("/{dish_id}")
 async def delete_item(
-        item_id: int,
-        service=Depends(items_service)
+        dish_id: int,
+        service=Depends(dishes_service)
 ):
-    """Удаление item"""
-    return await service._delete(entity_id=item_id)
+    """Удаление блюда"""
+    return await service._delete(entity_id=dish_id)

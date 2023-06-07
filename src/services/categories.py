@@ -4,6 +4,7 @@ from src.services.base import CrudService
 from src.repository.unit_of_work.base import SqlAlchemyUnitOfWork
 from src.schemas.categories import CategoriesInfo
 
+
 class CategoriesService(CrudService):
     pass
 

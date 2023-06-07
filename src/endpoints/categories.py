@@ -21,7 +21,7 @@ async def create_category(
         data: CreateCategorySchema,
         service=Depends(category_service)
 ):
-    """Создание категории(section возможно только 'бар', 'кухня' или 'суши-бар')"""
+    """Создание категории(Кухня, бар, суши-бар и т.д.)"""
     return await service._create(data)
 
 

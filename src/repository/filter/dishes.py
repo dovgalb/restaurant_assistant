@@ -1,10 +1,10 @@
-from src.db.models import Items
+from src.db.models import Dish
 from src.repository.filter.base import SqlAlchemyFilter
 
 
-class ItemsFilter(SqlAlchemyFilter):
+class DishesFilter(SqlAlchemyFilter):
     pass
 
 
-items_filter = ItemsFilter(Items)
+dishes_filter = DishesFilter(Dish)
 

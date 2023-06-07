@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, conint
 from typing import List, Optional
 
 
@@ -7,10 +7,13 @@ class DishesInfo(BaseModel):
 
     id: int
     name: str
-    weight: int
+    weight: conint(gt=0)
     description: str
+    subcategory_id: int
+    price: conint(gt=0)
     is_active: bool
-    # price: int
+
+# todo фото
 
     class Config:
         orm_mode = True
@@ -20,10 +23,11 @@ class CreateDishSchema(BaseModel):
     """Схема для создания item"""
 
     name: str
-    weight: int
+    weight: conint(gt=0)
     description: str
     is_active: bool = True
-    # price: int
+    subcategory_id: int
+    price: conint(gt=0)
 
     class Config:
         orm_mode = True
@@ -33,10 +37,11 @@ class UpdateDishSchema(BaseModel):
     """Схема для обновления item"""
 
     name: str
-    weight: int
+    weight: conint(gt=0)
     description: str
     is_active: bool
-    # price: int
+    subcategory_id: int
+    price: conint(gt=0)
 
     class Config:
         orm_mode = True

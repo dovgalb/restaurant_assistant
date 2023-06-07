@@ -3,6 +3,7 @@ from src.services.base import CrudService
 from src.repository.crud.subcategories import subcategories_repository
 from src.repository.unit_of_work.base import SqlAlchemyUnitOfWork
 
+
 class SubcategoryService(CrudService):
     pass
 

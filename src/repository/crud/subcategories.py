@@ -8,4 +8,5 @@ class SubcategoryRepository(
 ):
     pass
 
+
 subcategories_repository = SubcategoryRepository(Subcategory)

@@ -16,7 +16,7 @@ class CreateSubcategorySchema(BaseModel):
     """Базовая схема создания подкатегории"""
 
     name: str
-    # category_id: int
+    category_id: int
 
     class Config:
         orm_mode = True
@@ -26,7 +26,7 @@ class UpdateSubcategorySchema(BaseModel):
     """Базовая схема обновления подкатегории"""
 
     name: str
-    # category_id: int
+    category_id: int
 
     class Config:
         orm_mode = True

@@ -1,13 +1,13 @@
 """Модуль для взаимодействия с БД"""
-from src.db.models import Menus
+from src.db.models import Menu
 from src.repository.crud.base import SQLAlchemyCRUD
 from src.schemas.menu import CreateMenuSchema, UpdateMenuSchema
 
 
 class MenuRepository(
-    SQLAlchemyCRUD[Menus, CreateMenuSchema, UpdateMenuSchema]
+    SQLAlchemyCRUD[Menu, CreateMenuSchema, UpdateMenuSchema]
 ):
     pass
 
 
-menu_repository = MenuRepository(Menus)
+menu_repository = MenuRepository(Menu)
