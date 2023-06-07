@@ -1,128 +1,116 @@
-from typing import List
-from sqlalchemy import Enum, ForeignKey, String, Integer
-from sqlalchemy.orm import mapped_column, relationship, Mapped
+import enum
+from datetime import datetime
+from typing import List, Optional
+from sqlalchemy import ForeignKey, String, Integer, Boolean, TIMESTAMP, DateTime, Column, LargeBinary, UniqueConstraint
+from sqlalchemy.orm import mapped_column, relationship, Mapped, backref
+from sqlalchemy.sql import func
+from sqlalchemy import Enum as SQLAlchemyEnum
 
 from src.db.base import Base
 
 
-# class CategoryEnum(Enum):
-#     BAR = "Bar"
-#     KITCHEN = "Kitchen"
-
-
-class Users(Base):
+class User(Base):
     __tablename__ = "users"
+    id = mapped_column(Integer, primary_key=True)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    restaurants: Mapped[List["Restaurants"]] = relationship(back_populates="user")
-
-
-class RestaurantMenuAssociations(Base):
-    __tablename__ = "restaurant_menu_associations"
-
-    restaurant_id: Mapped[int] = mapped_column(ForeignKey("restaurants.id"), primary_key=True)
-    menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id"), primary_key=True)
-    restaurant: Mapped["Restaurants"] = relationship(back_populates="menu_associations")
-    menu: Mapped["Menus"] = relationship(back_populates="restaurant_associations")
+    restaurants = relationship("Restaurant", back_populates="user")
 
 
-class Restaurants(Base):
-    """class для ресторана"""
-    __tablename__ = 'restaurants'
+class RestaurantMenu(Base):
+    __tablename__ = "restaurant_menu"
+    id = mapped_column(Integer, primary_key=True)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
-    user_id: Mapped[Users] = mapped_column(ForeignKey("users.id"))
-
-    user: Mapped["Users"] = relationship(back_populates="restaurants")
-    menus: Mapped[List["Menus"]] = relationship(
-        secondary="restaurant_menu_associations", back_populates='restaurants'
-    )
-    menu_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="restaurant",
-                                                                                 viewonly=True)
+    restaurant_id = mapped_column(Integer, ForeignKey("restaurants.id"), primary_key=True)
+    menu_id = mapped_column(Integer, ForeignKey("menus.id"), primary_key=True)
 
 
-# todo Изменить схему на M2M
-# todo Добавить поле bool поле is_active
-# todo Подумать, нужно ли добавить адрес ресторана
-# todo добавить __repr__ методы для классов
+class Restaurant(Base):
+    __tablename__ = "restaurants"
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String(100), unique=True, index=True)
+    description = mapped_column(String, nullable=True)
+    address = mapped_column(String, unique=True, nullable=True)
+    created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    is_active = mapped_column(Boolean, default=True)
+
+    user_id = mapped_column(Integer, ForeignKey("users.id"))
+    user = relationship("User", back_populates="restaurants")
+    menus = relationship("Menu", secondary=RestaurantMenu.__table__, back_populates="restaurants")
 
 
-class Menus(Base):
-    """Класс меню(может быть сезонное меню, банкетное и т.д.)"""
+class Menu(Base):
     __tablename__ = "menus"
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String(100), unique=True, index=True)
+    description = mapped_column(String, nullable=True)
+    created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at = mapped_column(DateTime(timezone=True), onupdate=func.now())
+    is_active = mapped_column(Boolean, default=True)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
-
-    categories: Mapped[List["Categories"]] = relationship(back_populates="menu")
-    restaurants: Mapped[List["Restaurants"]] = relationship(
-        secondary="restaurant_menu_associations", back_populates='menus'
-    )
-    restaurant_associations: Mapped[List["RestaurantMenuAssociations"]] = relationship(back_populates="menu",
-                                                                                       viewonly=True)
-
-
-class Categories(Base):
-    """Категории меню(Основные блюда, горячие закуски, первые блюда и т.д.)"""
-    __tablename__ = "categories"
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String, unique=True)
-    section = mapped_column(Enum("Bar", "Kitchen", name="section_enum"), nullable=False)
-    menu_id: Mapped[int] = mapped_column(ForeignKey("menus.id"))
-    menu: Mapped["Menus"] = relationship(back_populates="categories")
-    category_associations: Mapped[List["ItemCategoryAssociations"]] = relationship(back_populates="category")
+    restaurants = relationship("Restaurant", secondary=RestaurantMenu.__table__, back_populates="menus")
+    categories = relationship("Category", back_populates="menu")
 
 
-# todo продумать связь для блюда и категории чтобы одно блюда можно было использовать в другом меню
+class Category(Base):
+    __tablename__ = 'categories'
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String, unique=True)
+    is_active = mapped_column(Boolean, default=True)
+
+    menu_id = mapped_column(Integer, ForeignKey("menus.id"))
+    menu = relationship("Menu", back_populates="categories")
+    subcategories = relationship("Subcategory", back_populates="category")
 
 
-class ItemCompoundAssociations(Base):
-    """Ассоциативный класс для связи таблиц item_table и compound_table"""
-    __tablename__ = "item_compound_associations"
+class Subcategory(Base):
+    __tablename__ = "subcategories"
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String, unique=True, index=True)
 
-    item_id: Mapped[int] = mapped_column(ForeignKey("items.id"), primary_key=True)
-    compound_id: Mapped[int] = mapped_column(ForeignKey("compounds.id"), primary_key=True)
-    amount: Mapped[int] = mapped_column(Integer, comment="Кол-во грамм продукта")
-    item: Mapped["Items"] = relationship(back_populates="compound_associations")
-    compound: Mapped["Compounds"] = relationship(back_populates="item_associations")
-
-
-class ItemCategoryAssociations(Base):
-    """Ассоциативный класс для связи таблиц item_table и category_table"""
-    __tablename__ = "item_category_associations"
-
-    item_id: Mapped[int] = mapped_column(ForeignKey("items.id"), primary_key=True)
-    category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), primary_key=True)
-    item: Mapped["Items"] = relationship(back_populates="category_associations")
-    category: Mapped["Categories"] = relationship(back_populates="category_associations")
+    category_id = mapped_column(Integer, ForeignKey("categories.id"))
+    category = relationship("Category", back_populates="subcategories")
+    dishes = relationship("Dish", back_populates="subcategory")
 
 
-class Items(Base):
-    """Позиция в меню(Бифштекс, Мохито, Паста и т.д.)"""
-    __tablename__ = "items"
+class DishIngredient(Base):
+    __tablename__ = "dish_ingredient"
+    id = mapped_column(Integer, primary_key=True)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String, unique=True)
-    weight: Mapped[int] = mapped_column(Integer)
-    description: Mapped[str] = mapped_column(String)
-    compounds: Mapped[List["Compounds"]] = relationship(
-        secondary="item_compound_associations",
-        back_populates="items"
-    )
-    compound_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="item")
-    category_associations: Mapped[List["ItemCategoryAssociations"]] = relationship(back_populates="item")
+    amount = mapped_column(Integer, nullable=False)
+
+    dish_id = mapped_column(Integer, ForeignKey("dishes.id"), primary_key=True)
+    ingredient_id = mapped_column(Integer, ForeignKey("ingredients.id"), primary_key=True)
+
+    # ingredient = relationship("Ingredient")
+    # dish = relationship("Dish")
 
 
-class Compounds(Base):
-    """Класс для ингредиентов блюда(Лук, картофель, сметана, перец и т.д.)"""
-    __tablename__ = "compounds"
+class Dish(Base):
+    __tablename__ = "dishes"
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String, unique=True, index=True)
+    description = mapped_column(String, nullable=True)
+    weight = mapped_column(Integer, nullable=True)
+    price = mapped_column(Integer)
+    photo = mapped_column(LargeBinary, nullable=False)
+    is_active = mapped_column(Boolean, default=True)
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100), unique=True)
-    items: Mapped[List["Items"]] = relationship(
-        secondary="item_compound_associations",
-        back_populates="compounds"
-    )
-    item_associations: Mapped[List["ItemCompoundAssociations"]] = relationship(back_populates="compound")
+    subcategory_id = mapped_column(Integer, ForeignKey('subcategories.id'))
+    subcategory = relationship("Subcategory", back_populates='dishes')
+    ingredients = relationship("Ingredient", secondary=DishIngredient.__table__, back_populates='dishes')
+
+
+class Ingredient(Base):
+    __tablename__ = "ingredients"
+    id = mapped_column(Integer, primary_key=True)
+    name = mapped_column(String, unique=True, index=True)
+    unit = mapped_column(String(3), nullable=True)
+
+    parent_id = mapped_column(Integer, ForeignKey("ingredients.id", ondelete="SET NULL", onupdate="CASCADE"), nullable=True)
+    sub_ingredients = relationship("Ingredient", cascade="all, delete-orphan", backref=backref("sub_ingredients_ingredients", remote_side=[id]))
+    dishes = relationship("Dish", secondary=DishIngredient.__table__, back_populates='ingredients')
+
+
+
+

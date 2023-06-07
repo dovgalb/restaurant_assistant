@@ -5,7 +5,7 @@ from src.services.base import CrudService
 
 
 class RestaurantService(CrudService):
-    """Сервис описания операций над медиакартами субъектов РФ"""
+    pass
 
 
 def restaurant_service() -> RestaurantService:
