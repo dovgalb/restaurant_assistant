@@ -10,10 +10,10 @@ class RestaurantsInfo(BaseModel):
     name: str
     description: Optional[str]
     address: Optional[str]
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
     is_active: bool = True
-    user_id: int
+    user_id: Optional[int]
 
     class Config:
         orm_mode = True
@@ -25,10 +25,10 @@ class CreateRestaurantsSchema(BaseModel):
     name: str
     description: Optional[str]
     address: Optional[str]
-    created_at: datetime
-    updated_at: datetime
     is_active: bool
-    user_id: int
+    # created_at: datetime
+    # updated_at: datetime
+    # user_id: int
 
     class Config:
         orm_mode = True
@@ -40,7 +40,7 @@ class UpdateRestaurantsSchema(BaseModel):
     name: str
     description: Optional[str]
     address: Optional[str]
-    updated_at: datetime
+    # updated_at: datetime
     is_active: bool
     # user_id: int
 

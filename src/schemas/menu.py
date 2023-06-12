@@ -10,8 +10,8 @@ class MenuInfo(BaseModel):
     id: int
     name: str
     description: Optional[str]
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
     is_active: bool
     # TODO сделать
 
@@ -24,9 +24,11 @@ class CreateMenuSchema(BaseModel):
 
     name: str
     description: Optional[str]
-    created_at: datetime
-    updated_at: datetime
     is_active: bool
+    restaurant_ids: Optional[list[int]]
+    # created_at: datetime
+    # updated_at: datetime
+
 
     # TODO сделать
 
@@ -38,8 +40,8 @@ class UpdateMenuSchema(BaseModel):
     """Базовая схема модели Меню"""
 
     name: str
-    description: str
-    updated_at: datetime
+    description: Optional[str]
+    restaurant_ids: Optional[list[int]]
     is_active: bool
 
     # TODO сделать

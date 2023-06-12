@@ -5,7 +5,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends
 
-from src.repository.filter.restaurants import restaurants_filter
+from src.repository.filter.restaurants import restaurants_filter, RestaurantFilter
 from src.schemas.restaurants import RestaurantsInfo, CreateRestaurantsSchema, UpdateRestaurantsSchema
 from src.services.restaurants import restaurant_service
 
@@ -14,15 +14,17 @@ restaurant_router = APIRouter()
 
 @restaurant_router.get("/", response_model=List[RestaurantsInfo])
 async def get_restaurants(
+        search: RestaurantFilter = Depends(restaurants_filter),
         service=Depends(restaurant_service)
 ):
     """Получение списка ресторанов"""
-    return await service._list(restaurants_filter)
+    return await service._list(search)
 
 
-@restaurant_router.post("/", response_model=RestaurantsInfo)
+@restaurant_router.post("/", response_model=CreateRestaurantsSchema)
 async def create_restaurant(
     data: CreateRestaurantsSchema,
+    # user: Depends(get_user),
     service=Depends(restaurant_service)
 ):
     """Создание ресторана"""

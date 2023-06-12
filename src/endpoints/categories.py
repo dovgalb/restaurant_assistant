@@ -3,17 +3,18 @@ from fastapi import APIRouter, Depends
 
 from src.schemas.categories import CategoriesInfo, CreateCategorySchema, UpdateCategorySchema
 from src.services.categories import category_service
-from src.repository.filter.categories import category_filter
+from src.repository.filter.categories import category_filter, CategoryFilter
 
 category_router = APIRouter()
 
 
 @category_router.get('/', response_model=List[CategoriesInfo])
 async def get_categories(
-        service=Depends(category_service)
+        service=Depends(category_service),
+        query_filter: CategoryFilter = Depends(category_filter)
 ):
     """Получение списка категорий(салаты, десерты, коктейли)"""
-    return await service._list(category_filter)
+    return await service._list(query_filter)
 
 
 @category_router.post('/', response_model=CreateCategorySchema)

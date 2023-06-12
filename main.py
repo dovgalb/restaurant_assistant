@@ -12,7 +12,7 @@ app = FastAPI(
 )
 
 app.include_router(restaurant_router, prefix="/restaurants",  tags=["Restaurants"],)
-app.include_router(menu_router, prefix="/menus", tags=["Menus"],)
+app.include_router(menu_router, prefix="", tags=["Menus"],)
 app.include_router(category_router, prefix="/categories", tags=["Categories"])
 app.include_router(subcategory_router, prefix="/subcategories", tags=["Subcategories"])
 app.include_router(dish_router, prefix="/dishes", tags=["Dishes"])

@@ -1,10 +1,6 @@
-import enum
-from datetime import datetime
-from typing import List, Optional
 from sqlalchemy import ForeignKey, String, Integer, Boolean, TIMESTAMP, DateTime, Column, LargeBinary, UniqueConstraint
 from sqlalchemy.orm import mapped_column, relationship, Mapped, backref
 from sqlalchemy.sql import func
-from sqlalchemy import Enum as SQLAlchemyEnum
 
 from src.db.base import Base
 
@@ -18,7 +14,7 @@ class User(Base):
 
 class RestaurantMenu(Base):
     __tablename__ = "restaurant_menu"
-    id = mapped_column(Integer, primary_key=True)
+    # id = mapped_column(Integer, primary_key=True)
 
     restaurant_id = mapped_column(Integer, ForeignKey("restaurants.id"), primary_key=True)
     menu_id = mapped_column(Integer, ForeignKey("menus.id"), primary_key=True)
@@ -34,7 +30,7 @@ class Restaurant(Base):
     updated_at = mapped_column(DateTime(timezone=True), onupdate=func.now())
     is_active = mapped_column(Boolean, default=True)
 
-    user_id = mapped_column(Integer, ForeignKey("users.id"))
+    user_id = mapped_column(Integer, ForeignKey("users.id"), nullable=True)
     user = relationship("User", back_populates="restaurants")
     menus = relationship("Menu", secondary=RestaurantMenu.__table__, back_populates="restaurants")
 
