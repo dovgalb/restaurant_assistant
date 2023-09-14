@@ -3,8 +3,8 @@ from typing import Optional
 
 from sqlalchemy import BinaryExpression, UnaryExpression, Select, select
 
-from repository.base import AlchemyModelType, CreateSchemaType
 from src.db.models import Menu, Restaurant, RestaurantMenu
+from src.repository.base import AlchemyModelType
 from src.repository.crud.base import SQLAlchemyCRUD
 from src.schemas.menu import CreateMenuSchema, UpdateMenuSchema
 

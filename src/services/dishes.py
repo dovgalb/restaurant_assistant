@@ -1,4 +1,4 @@
-from schemas.dishes import DishesInfo
+from src.schemas.dishes import DishesInfo
 from src.repository.crud.dishes import dishes_repository
 from src.services.base import CrudService
 from src.repository.unit_of_work.base import SqlAlchemyUnitOfWork

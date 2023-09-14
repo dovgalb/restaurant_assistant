@@ -1,7 +1,7 @@
 """Модуль для бизнес-логики"""
-from repository.base import ReadSchemaType, CreateSchemaType
-from repository.filter.base import QueryFilter
+from src.repository.base import ReadSchemaType, CreateSchemaType
 from src.repository.crud.menu import menu_repository
+from src.repository.filter.base import QueryFilter
 from src.repository.unit_of_work.base import SqlAlchemyUnitOfWork
 from src.schemas.menu import MenuInfo
 from src.services.base import CrudService
