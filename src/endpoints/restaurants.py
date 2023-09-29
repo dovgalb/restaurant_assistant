@@ -17,7 +17,7 @@ async def get_restaurants(
         search: RestaurantFilter = Depends(restaurants_filter),
         service=Depends(restaurant_service)
 ):
-    """Получение списка ресторанов"""
+    """Получение списка всех ресторанов."""
     return await service._list(search)
 
 
