@@ -1,6 +1,18 @@
 version: '3.7'
 
 services:
+  web:
+    container_name: web_nginx
+    image: nginx:alpine
+    depends_on:
+      - api
+    ports:
+      - "8082:80"
+    volumes:
+      - ./src/config/conf.d:/etc/nginx/conf.d
+    networks:
+      - custom
+
   api:
     container_name: menu_api
     build:
@@ -19,6 +31,8 @@ services:
       - src/config/.env
     depends_on:
       - postgres
+    networks:
+      - custom
 
   postgres:
     container_name: ra_db_menu
@@ -30,6 +44,11 @@ services:
       - "5435:5432"
     env_file:
       - src/config/.env
+    networks:
+      - custom
 
 volumes:
   postgres_data:
+networks:
+  custom:
+    driver: bridge
